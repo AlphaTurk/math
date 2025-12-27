@@ -1,0 +1,1206 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2. Sınıf Matematik Tekrar + Envanter</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#111a33;
+      --card2:#0f1730;
+      --text:#e9eefc;
+      --muted:#aeb9de;
+      --good:#27d17f;
+      --bad:#ff4d6d;
+      --warn:#ffc857;
+      --accent:#6aa6ff;
+      --epic:#b86bff;
+      --line:rgba(255,255,255,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(106,166,255,.25), transparent 55%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(39,209,127,.18), transparent 55%),
+                  radial-gradient(900px 600px at 50% 110%, rgba(255,77,109,.16), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      padding:22px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+    .app{
+      width:min(980px, 100%);
+      display:grid;
+      gap:14px;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(17,26,51,.9), rgba(15,23,48,.85));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .title{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      min-width: 260px;
+    }
+    .badge{
+      width:42px;height:42px;border-radius:14px;
+      background: linear-gradient(145deg, rgba(106,166,255,.35), rgba(39,209,127,.18));
+      border:1px solid var(--line);
+      display:grid;place-items:center;
+      font-weight:800;
+    }
+    h1{font-size:16px;margin:0}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .stats{
+      display:flex; gap:10px; flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding:8px 10px;
+      border-radius: 999px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex; gap:8px; align-items:center;
+    }
+    .pill b{color:var(--text)}
+    .grid{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+      .title{min-width:auto}
+      header{flex-direction:column;align-items:stretch}
+      .stats{justify-content:flex-start}
+    }
+    .stack{display:grid; gap:14px;}
+    .card{
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(17,26,51,.85), rgba(15,23,48,.82));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+    }
+    .card .hd h2{margin:0;font-size:14px}
+    .card .bd{padding:14px}
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    select, input[type="number"], input[type="text"]{
+      width:100%;
+      padding:10px 11px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      color:var(--text);
+      outline:none;
+    }
+    select:focus, input:focus{border-color: rgba(106,166,255,.55); box-shadow:0 0 0 3px rgba(106,166,255,.15)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:650;
+    }
+    button.primary{
+      border-color: rgba(106,166,255,.5);
+      background: linear-gradient(180deg, rgba(106,166,255,.28), rgba(106,166,255,.12));
+    }
+    button.danger{
+      border-color: rgba(255,77,109,.5);
+      background: linear-gradient(180deg, rgba(255,77,109,.22), rgba(255,77,109,.10));
+    }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+    button:active{transform: translateY(1px)}
+    .hint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.4}
+    .qwrap{display:grid; gap:14px;}
+    .question{
+      padding:16px;
+      border:1px dashed rgba(255,255,255,.16);
+      background: rgba(255,255,255,.04);
+      border-radius: 16px;
+    }
+    .qmeta{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .tag{
+      font-size:12px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      padding:6px 10px;
+      border-radius:999px;
+      color:var(--muted);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .tag .dot{
+      width:9px;height:9px;border-radius:999px;
+      display:inline-block;
+      background: rgba(255,255,255,.25);
+    }
+    .progress{
+      height:10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      background: rgba(0,0,0,.18);
+      width: 220px;
+      max-width: 100%;
+    }
+    .bar{height:100%; width:0%; background: linear-gradient(90deg, rgba(39,209,127,.75), rgba(106,166,255,.75));}
+    .big{
+      font-size:28px;
+      margin:6px 0 0 0;
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .answerRow{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .answerRow input{
+      width: 220px;
+      font-size:18px;
+      padding:12px 12px;
+      border-radius: 14px;
+    }
+    .feedback{
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+      min-height: 46px;
+      display:flex; align-items:center; gap:10px;
+      color: var(--muted);
+      margin-top:12px;
+    }
+    .feedback.good{border-color: rgba(39,209,127,.5); color: rgba(39,209,127,.95); background: rgba(39,209,127,.10)}
+    .feedback.bad{border-color: rgba(255,77,109,.5); color: rgba(255,77,109,.95); background: rgba(255,77,109,.10)}
+    .feedback.warn{border-color: rgba(255,200,87,.5); color: rgba(255,200,87,.95); background: rgba(255,200,87,.10)}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:12px; padding:2px 6px;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:8px;
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+    }
+    .mini{font-size:12px;color: var(--muted);}
+    .footer{
+      text-align:center;
+      font-size:12px;
+      color: rgba(255,255,255,.55);
+      padding:10px 0 4px;
+    }
+    .toggle{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+    .toggle input{width:auto}
+    .separator{height:1px;background:var(--line);margin:12px 0}
+    .list{margin:0; padding-left:16px; color:var(--muted); font-size:12px; line-height:1.5}
+
+    /* Inventory */
+    .invTop{display:grid; gap:10px;}
+    .invRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    .invRow > *{flex:1}
+    .invRow button{flex:0 0 auto}
+    .dropCard{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      border-radius: 16px;
+      padding:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .dropLeft{display:flex; flex-direction:column; gap:3px;}
+    .dropName{font-weight:800}
+    .rarity{
+      font-size:12px;
+      color:var(--muted);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .rarity .dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+    .invList{
+      margin-top:10px;
+      display:grid;
+      gap:10px;
+      max-height: 240px;
+      overflow:auto;
+      padding-right: 6px;
+    }
+    .invItem{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .invItem .left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 0;
+    }
+    .invItem .name{
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 180px;
+    }
+    .countChip{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      border-radius: 999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:var(--text);
+      font-weight:700;
+      flex:0 0 auto;
+    }
+    .rarChip{
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      flex:0 0 auto;
+    }
+    .rar-common{border-color: rgba(255,255,255,.18); color: rgba(255,255,255,.70)}
+    .rar-rare{border-color: rgba(106,166,255,.55); color: rgba(106,166,255,.95)}
+    .rar-epic{border-color: rgba(184,107,255,.55); color: rgba(184,107,255,.95)}
+    .rar-legendary{border-color: rgba(255,200,87,.65); color: rgba(255,200,87,.98)}
+    .smallNote{font-size:12px;color:var(--muted);line-height:1.4}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title">
+        <div class="badge">2</div>
+        <div>
+          <h1>2. Sınıf Matematik Tekrar</h1>
+          <div class="sub">Rastgele sorular • Anında kontrol • Puan • Kasa • Envanter</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="pill">Soru: <b id="stTotal">0</b></div>
+        <div class="pill">Doğru: <b id="stCorrect">0</b></div>
+        <div class="pill">Yanlış: <b id="stWrong">0</b></div>
+        <div class="pill">Seri: <b id="stStreak">0</b></div>
+        <div class="pill">En iyi seri: <b id="stBest">0</b></div>
+        <div class="pill">Puan: <b id="stScore">0</b></div>
+        <div class="pill">Envanter: <b id="stInv">0</b></div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT COLUMN -->
+      <div class="stack">
+        <!-- SETTINGS -->
+        <section class="card">
+          <div class="hd">
+            <h2>Ayarlar</h2>
+            <span class="tag" id="modeTag">Hazır</span>
+          </div>
+          <div class="bd">
+            <label for="topic">Konu</label>
+            <select id="topic">
+              <option value="add">Toplama</option>
+              <option value="sub">Çıkarma</option>
+              <option value="mix" selected>Karışık (Toplama + Çıkarma)</option>
+              <option value="tensones">Onluk - Birlik</option>
+              <option value="compare">Karşılaştırma (&lt; &gt; =)</option>
+              <option value="problem">Basit Problemler</option>
+            </select>
+
+            <div class="row" style="margin-top:10px;">
+              <div>
+                <label for="minN">En küçük sayı</label>
+                <input id="minN" type="number" value="0" min="0" max="999" />
+              </div>
+              <div>
+                <label for="maxN">En büyük sayı</label>
+                <input id="maxN" type="number" value="100" min="0" max="999" />
+              </div>
+            </div>
+
+            <div class="toggle">
+              <input id="noNegative" type="checkbox" checked />
+              <label for="noNegative" style="margin:0;">Çıkarmada negatif olmasın</label>
+            </div>
+
+            <div class="toggle">
+              <input id="sound" type="checkbox" />
+              <label for="sound" style="margin:0;">Doğru/yanlış sesi</label>
+            </div>
+
+            <div class="btns">
+              <button class="primary" id="btnStart">Başla / Yeni Soru</button>
+              <button id="btnSkip">Atla</button>
+              <button class="danger" id="btnReset">Sıfırla</button>
+            </div>
+
+            <div class="separator"></div>
+            <div class="hint">
+              <ul class="list">
+                <li><span class="kbd">Enter</span> ile kontrol edebilirsin.</li>
+                <li><b>Puan:</b> Doğru +10, Yanlış -5 (0 altına düşmez). Seri bonusu: 3→+5, 5→+10, 10→+20.</li>
+                <li><b>Göster:</b> -3 puan (0 altına düşmez).</li>
+                <li><b>Kasa:</b> Puanla açılır, eşya envantere eklenir.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- INVENTORY -->
+        <section class="card">
+          <div class="hd">
+            <h2>Kasa & Envanter</h2>
+            <span class="tag" id="invTag"><span class="dot"></span> Kaydediliyor</span>
+          </div>
+          <div class="bd">
+            <div class="invTop">
+              <div>
+                <label for="crateType">Kasa türü</label>
+                <select id="crateType">
+                  <option value="basic">Küçük Kasa (30 puan)</option>
+                  <option value="pro">Büyük Kasa (120 puan)</option>
+                </select>
+              </div>
+
+              <div class="invRow">
+                <button class="primary" id="btnOpenCrate">Kasa Aç</button>
+                <button id="btnInvClear">Envanteri Temizle</button>
+              </div>
+
+              <div class="dropCard" id="dropCard">
+                <div class="dropLeft">
+                  <div class="dropName" id="dropName">Henüz eşya çıkmadı.</div>
+                  <div class="rarity" id="dropRarity"><span class="dot"></span> Kasa açınca burada görünecek.</div>
+                </div>
+                <div class="countChip" id="dropWhen">—</div>
+              </div>
+
+              <div class="smallNote" id="crateOddsText"></div>
+
+              <div class="separator"></div>
+
+              <div class="invRow">
+                <div>
+                  <label for="invFilter">Filtre</label>
+                  <select id="invFilter">
+                    <option value="all" selected>Hepsi</option>
+                    <option value="common">Yaygın</option>
+                    <option value="rare">Nadir</option>
+                    <option value="epic">Efsane</option>
+                    <option value="legendary">Efsanevi</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="invSort">Sırala</label>
+                  <select id="invSort">
+                    <option value="rarity" selected>Nadirlik</option>
+                    <option value="name">İsim</option>
+                    <option value="count">Adet</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="invList" id="invList"></div>
+
+              <div class="smallNote" id="invSummary"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT: QUIZ -->
+      <section class="card">
+        <div class="hd">
+          <h2>Alıştırma</h2>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+            <div class="progress" aria-label="Başarı göstergesi">
+              <div class="bar" id="bar"></div>
+            </div>
+            <span class="mini" id="accText">Başarı: %0</span>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="qwrap">
+            <div class="question">
+              <div class="qmeta">
+                <span class="tag" id="qType">Karışık</span>
+                <span class="mini" id="qCount">0. soru</span>
+              </div>
+              <div class="big" id="qText">Başlamak için “Başla / Yeni Soru”ya tıkla.</div>
+
+              <div class="answerRow">
+                <input id="answer" type="text" inputmode="numeric" autocomplete="off" placeholder="Cevabın..." disabled />
+                <button class="primary" id="btnCheck" disabled>Kontrol Et</button>
+                <button id="btnShow" disabled>Göster</button>
+              </div>
+
+              <div class="feedback" id="feedback">Hazır olduğunda başlayalım 🙂</div>
+            </div>
+
+            <div class="card" style="background: rgba(0,0,0,.14); border-radius: 16px; border:1px solid var(--line);">
+              <div class="bd">
+                <b style="font-size:13px;">Mini hedef</b>
+                <div class="mini" style="margin-top:6px;">
+                  10 soruda %80 başarıyı yakala. Seri yap, puan kazan, kasa aç!
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">© 2. Sınıf Matematik Tekrar • Offline çalışır • Bu tarayıcıda (cihazda) kaydedilir</div>
+  </div>
+
+<script>
+(() => {
+  // ========= Helpers =========
+  const el = (id) => document.getElementById(id);
+
+  function safeJsonParse(s){
+    try { return JSON.parse(s); } catch { return null; }
+  }
+
+  function randInt(a, b){
+    return Math.floor(Math.random() * (b - a + 1)) + a;
+  }
+
+  function clampInt(v, fallback){
+    const n = Number(v);
+    if (!Number.isFinite(n)) return fallback;
+    return Math.trunc(n);
+  }
+
+  function nowText(){
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, "0");
+    const mm = String(d.getMinutes()).padStart(2, "0");
+    return `${hh}:${mm}`;
+  }
+
+  function makeId(){
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+  }
+
+  // ========= Per-device 저장 (localStorage) =========
+  const GAME_VERSION = 1;
+  const DEVICE_KEY = "math2_deviceId";
+  let deviceId = localStorage.getItem(DEVICE_KEY);
+  if (!deviceId){
+    deviceId = makeId();
+    localStorage.setItem(DEVICE_KEY, deviceId);
+  }
+  const STORAGE_KEY = `math2_save_v${GAME_VERSION}_${deviceId}`;
+
+  // ========= Elements =========
+  const topic = el("topic");
+  const minN = el("minN");
+  const maxN = el("maxN");
+  const noNegative = el("noNegative");
+  const sound = el("sound");
+
+  const btnStart = el("btnStart");
+  const btnSkip  = el("btnSkip");
+  const btnReset = el("btnReset");
+
+  const qType = el("qType");
+  const qText = el("qText");
+  const qCount= el("qCount");
+
+  const answer = el("answer");
+  const btnCheck = el("btnCheck");
+  const btnShow  = el("btnShow");
+  const feedback = el("feedback");
+  const modeTag  = el("modeTag");
+
+  const stTotal = el("stTotal");
+  const stCorrect = el("stCorrect");
+  const stWrong = el("stWrong");
+  const stStreak = el("stStreak");
+  const stBest = el("stBest");
+  const stScore = el("stScore");
+  const stInv = el("stInv");
+
+  const bar = el("bar");
+  const accText = el("accText");
+
+  // Inventory UI
+  const invTag = el("invTag");
+  const crateType = el("crateType");
+  const btnOpenCrate = el("btnOpenCrate");
+  const btnInvClear = el("btnInvClear");
+  const dropName = el("dropName");
+  const dropRarity = el("dropRarity");
+  const dropWhen = el("dropWhen");
+  const crateOddsText = el("crateOddsText");
+
+  const invFilter = el("invFilter");
+  const invSort = el("invSort");
+  const invList = el("invList");
+  const invSummary = el("invSummary");
+
+  // ========= Game Data =========
+  const RARITY_ORDER = ["legendary", "epic", "rare", "common"];
+  const RARITY_LABEL = {
+    common: "Yaygın",
+    rare: "Nadir",
+    epic: "Efsane",
+    legendary: "Efsanevi"
+  };
+  const RARITY_DOT = {
+    common: "rgba(255,255,255,.35)",
+    rare: "rgba(106,166,255,.95)",
+    epic: "rgba(184,107,255,.95)",
+    legendary: "rgba(255,200,87,.98)"
+  };
+
+  const ITEMS = [
+    // Common
+    {id:"pencil_wood", name:"Ahşap Kalem", rarity:"common"},
+    {id:"eraser_soft", name:"Yumuşak Silgi", rarity:"common"},
+    {id:"notebook_small", name:"Mini Defter", rarity:"common"},
+    {id:"sticker_star", name:"Yıldız Sticker", rarity:"common"},
+    {id:"ruler_blue", name:"Mavi Cetvel", rarity:"common"},
+    // Rare
+    {id:"pencil_gold", name:"Altın Kalem", rarity:"rare"},
+    {id:"badge_add", name:"Toplama Rozeti", rarity:"rare"},
+    {id:"badge_sub", name:"Çıkarma Rozeti", rarity:"rare"},
+    {id:"case_cool", name:"Havalı Kalemlik", rarity:"rare"},
+    // Epic
+    {id:"trophy_math", name:"Matematik Kupası", rarity:"epic"},
+    {id:"cape_hero", name:"Sayı Kahramanı Pelerini", rarity:"epic"},
+    {id:"book_magic", name:"Sihirli Problem Kitabı", rarity:"epic"},
+    // Legendary
+    {id:"crown_genius", name:"Dahi Tacı", rarity:"legendary"},
+    {id:"medal_legend", name:"Efsane Madalya", rarity:"legendary"}
+  ];
+
+  const CRATES = {
+    basic: {
+      name: "Küçük Kasa",
+      cost: 30,
+      weights: { common: 78, rare: 18, epic: 3, legendary: 1 }
+    },
+    pro: {
+      name: "Büyük Kasa",
+      cost: 120,
+      weights: { common: 55, rare: 30, epic: 12, legendary: 3 }
+    }
+  };
+
+  function rarityClass(r){ return `rar-${r}`; }
+  function rarityDot(r){ return RARITY_DOT[r] || "rgba(255,255,255,.35)"; }
+
+  // ========= State =========
+  let current = null; // {type, text, correct, explain?}
+
+  let state = {
+    stats: {
+      total: 0, correct: 0, wrong: 0,
+      streak: 0, best: 0, score: 0
+    },
+    settings: {
+      topic: "mix",
+      minN: 0,
+      maxN: 100,
+      noNegative: true,
+      sound: false
+    },
+    inventory: {
+      // itemId: {id,name,rarity,count}
+      items: {},
+      lastDrop: null // {id,name,rarity,timeText}
+    }
+  };
+
+  // ========= Save / Load =========
+  function markSaved(){
+    invTag.innerHTML = `<span class="dot" style="background: rgba(39,209,127,.75)"></span> Kaydedildi`;
+  }
+  function markDirty(){
+    invTag.innerHTML = `<span class="dot" style="background: rgba(255,200,87,.85)"></span> Kaydediliyor`;
+  }
+
+  function save(){
+    markDirty();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    // tiny UI cue
+    setTimeout(markSaved, 150);
+  }
+
+  function migrateOldKeysIfNeeded(){
+    // önceki sürümde bestStreak/score ayrı tutulmuş olabilir
+    const oldBest = Number(localStorage.getItem("bestStreak") || 0);
+    const oldScore = Number(localStorage.getItem("score") || 0);
+    if (oldBest && !state.stats.best) state.stats.best = oldBest;
+    if (oldScore && !state.stats.score) state.stats.score = oldScore;
+  }
+
+  function load(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? safeJsonParse(raw) : null;
+    if (parsed && typeof parsed === "object"){
+      // shallow merge to be safe
+      state.stats = Object.assign(state.stats, parsed.stats || {});
+      state.settings = Object.assign(state.settings, parsed.settings || {});
+      state.inventory = Object.assign(state.inventory, parsed.inventory || {});
+      state.inventory.items = (parsed.inventory && parsed.inventory.items) ? parsed.inventory.items : (state.inventory.items || {});
+    } else {
+      migrateOldKeysIfNeeded();
+    }
+  }
+
+  // ========= UI Update =========
+  function setFeedback(kind, msg){
+    feedback.classList.remove("good","bad","warn");
+    if (kind) feedback.classList.add(kind);
+    feedback.textContent = msg;
+  }
+
+  function beep(ok){
+    if (!sound.checked) return;
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.value = ok ? 880 : 220;
+    g.gain.value = 0.06;
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    setTimeout(() => { o.stop(); ctx.close(); }, 120);
+  }
+
+  function validateRange(){
+    let mn = clampInt(minN.value, 0);
+    let mx = clampInt(maxN.value, 100);
+    if (mn < 0) mn = 0;
+    if (mx < mn) mx = mn;
+    if (mx > 999) mx = 999;
+    minN.value = mn;
+    maxN.value = mx;
+    return {mn, mx};
+  }
+
+  function topicLabel(t){
+    switch(t){
+      case "add": return "Toplama";
+      case "sub": return "Çıkarma";
+      case "mix": return "Karışık";
+      case "tensones": return "Onluk - Birlik";
+      case "compare": return "Karşılaştırma";
+      case "problem": return "Problemler";
+      default: return "Alıştırma";
+    }
+  }
+
+  function streakBonus(streak){
+    if (streak >= 10) return 20;
+    if (streak >= 5) return 10;
+    if (streak >= 3) return 5;
+    return 0;
+  }
+
+  function inventoryCounts(){
+    const items = Object.values(state.inventory.items || {});
+    const totalCount = items.reduce((s, it) => s + (it.count || 0), 0);
+    const unique = items.length;
+    return {totalCount, unique};
+  }
+
+  function updateStatsUI(){
+    const s = state.stats;
+    stTotal.textContent = String(s.total);
+    stCorrect.textContent = String(s.correct);
+    stWrong.textContent = String(s.wrong);
+    stStreak.textContent = String(s.streak);
+    stBest.textContent = String(s.best);
+    stScore.textContent = String(s.score);
+
+    const {totalCount} = inventoryCounts();
+    stInv.textContent = String(totalCount);
+
+    const acc = s.total === 0 ? 0 : Math.round((s.correct / s.total) * 100);
+    bar.style.width = acc + "%";
+    accText.textContent = "Başarı: %" + acc;
+
+    // Buttons based on points
+    const ct = CRATES[crateType.value];
+    btnOpenCrate.disabled = s.score < ct.cost;
+
+    save();
+  }
+
+  function applySettingsToUI(){
+    topic.value = state.settings.topic ?? "mix";
+    minN.value = state.settings.minN ?? 0;
+    maxN.value = state.settings.maxN ?? 100;
+    noNegative.checked = !!state.settings.noNegative;
+    sound.checked = !!state.settings.sound;
+
+    qType.textContent = topicLabel(topic.value);
+    modeTag.textContent = "Hazır";
+  }
+
+  // ========= Questions =========
+  function makeAdd(mn, mx){
+    const a = randInt(mn, mx);
+    const b = randInt(mn, mx);
+    return { type: "Toplama", text: `${a} + ${b} = ?`, correct: a + b };
+  }
+  function makeSub(mn, mx, avoidNegative){
+    let a = randInt(mn, mx);
+    let b = randInt(mn, mx);
+    if (avoidNegative && b > a) [a, b] = [b, a];
+    return { type: "Çıkarma", text: `${a} - ${b} = ?`, correct: a - b };
+  }
+  function makeTensOnes(mn, mx){
+    const upper = Math.min(mx, 99);
+    const lower = Math.min(mn, upper);
+    const n = randInt(lower, upper);
+    const tens = Math.floor(n / 10);
+    const ones = n % 10;
+    const ask = randInt(1, 2);
+    if (ask === 1){
+      return { type: "Onluk - Birlik", text: `${n} sayısında kaç onluk var?`, correct: tens, explain: `${n} = ${tens} onluk ve ${ones} birlik.` };
+    }
+    return { type: "Onluk - Birlik", text: `${n} sayısında kaç birlik var?`, correct: ones, explain: `${n} = ${tens} onluk ve ${ones} birlik.` };
+  }
+  function makeCompare(mn, mx){
+    const a = randInt(mn, mx);
+    const b = randInt(mn, mx);
+    let correct;
+    if (a > b) correct = ">";
+    else if (a < b) correct = "<";
+    else correct = "=";
+    return {
+      type: "Karşılaştırma",
+      text: `${a}  __  ${b}  ( <  >  = )`,
+      correct,
+      explain: a === b ? "İkisi eşit." : (a > b ? `${a} daha büyüktür.` : `${b} daha büyüktür.`)
+    };
+  }
+  function makeProblem(mn, mx){
+    const pool = [
+      () => {
+        const a = randInt(5, Math.max(10, Math.min(mx, 60)));
+        const b = randInt(1, Math.max(5, Math.min(mx, 30)));
+        return { type:"Problem", text:`Ali'nin ${a} bilyesi var. Arkadaşı ${b} bilye daha veriyor. Ali'nin şimdi kaç bilyesi olur?`, correct: a + b, explain: `${a} + ${b} = ${a+b}` };
+      },
+      () => {
+        const a = randInt(10, Math.max(15, Math.min(mx, 80)));
+        const b = randInt(1, Math.max(5, Math.min(mx, a)));
+        return { type:"Problem", text:`Zeynep'in ${a} şekeri vardı. ${b} tanesini yedi. Kaç şekeri kaldı?`, correct: a - b, explain: `${a} - ${b} = ${a-b}` };
+      },
+      () => {
+        const a = randInt(5, Math.max(10, Math.min(mx, 50)));
+        const b = randInt(5, Math.max(10, Math.min(mx, 50)));
+        return { type:"Problem", text:`Bir kutuda ${a} kalem var. Diğer kutuda ${b} kalem var. Toplam kaç kalem var?`, correct: a + b, explain: `${a} + ${b} = ${a+b}` };
+      },
+      () => {
+        const total = randInt(12, Math.max(20, Math.min(mx, 90)));
+        const take = randInt(1, Math.max(5, Math.min(mx, total-1)));
+        return { type:"Problem", text:`Bir sınıfta ${total} öğrenci var. ${take} öğrenci dışarı çıktı. Sınıfta kaç öğrenci kaldı?`, correct: total - take, explain: `${total} - ${take} = ${total-take}` };
+      }
+    ];
+    return pool[randInt(0, pool.length - 1)]();
+  }
+
+  function generateQuestion(){
+    const {mn, mx} = validateRange();
+    const t = topic.value;
+
+    let q;
+    if (t === "add") q = makeAdd(mn, mx);
+    else if (t === "sub") q = makeSub(mn, mx, noNegative.checked);
+    else if (t === "mix") q = (Math.random() < 0.5) ? makeAdd(mn, mx) : makeSub(mn, mx, noNegative.checked);
+    else if (t === "tensones") q = makeTensOnes(mn, mx);
+    else if (t === "compare") q = makeCompare(mn, mx);
+    else q = makeProblem(mn, mx);
+
+    qType.textContent = q.type;
+    modeTag.textContent = topicLabel(t);
+    return q;
+  }
+
+  function startNewQuestion(){
+    current = generateQuestion();
+    qText.textContent = current.text;
+    answer.value = "";
+    answer.disabled = false;
+    btnCheck.disabled = false;
+    btnShow.disabled = false;
+    answer.focus();
+
+    qCount.textContent = `${state.stats.total + 1}. soru (cevaplayınca sayılır)`;
+    setFeedback(null, "Cevabı yaz ve Kontrol Et’e bas.");
+  }
+
+  function normalizeInput(val){
+    return String(val).trim().replace(/\s+/g, "");
+  }
+
+  function check(){
+    if (!current) {
+      setFeedback("warn", "Önce yeni soru başlat.");
+      return;
+    }
+    const raw = normalizeInput(answer.value);
+    if (raw.length === 0){
+      setFeedback("warn", "Bir cevap yaz 🙂");
+      return;
+    }
+
+    let ok = false;
+    if (typeof current.correct === "number"){
+      const n = Number(raw);
+      if (!Number.isFinite(n)){
+        setFeedback("warn", "Lütfen sayı yaz.");
+        return;
+      }
+      ok = (Math.trunc(n) === current.correct);
+    } else {
+      ok = (raw === current.correct);
+    }
+
+    const s = state.stats;
+    s.total += 1;
+
+    if (ok){
+      s.correct += 1;
+      s.streak += 1;
+
+      const bonus = streakBonus(s.streak);
+      s.score += (10 + bonus);
+
+      if (s.streak > s.best) s.best = s.streak;
+
+      const extra = current.explain ? ` (${current.explain})` : "";
+      const bonusTxt = bonus > 0 ? ` +${bonus} seri bonusu!` : "";
+      setFeedback("good", `Doğru! ✅ +10${bonusTxt} | Cevap: ${current.correct}${extra}`);
+      beep(true);
+    } else {
+      s.wrong += 1;
+      s.streak = 0;
+      s.score = Math.max(0, s.score - 5);
+
+      const extra = current.explain ? ` (${current.explain})` : "";
+      setFeedback("bad", `Yanlış ❌ -5 | Doğru cevap: ${current.correct}${extra}`);
+      beep(false);
+    }
+
+    current = null;
+    answer.disabled = true;
+    btnCheck.disabled = true;
+    btnShow.disabled = true;
+
+    qCount.textContent = `${s.total}. soru tamamlandı`;
+
+    updateStatsUI();
+    setTimeout(() => startNewQuestion(), 700);
+  }
+
+  function showAnswer(){
+    if (!current) return;
+
+    state.stats.score = Math.max(0, state.stats.score - 3);
+
+    const extra = current.explain ? ` (${current.explain})` : "";
+    setFeedback("warn", `Cevap: ${current.correct}${extra}  (Göster: -3 puan)`);
+    updateStatsUI();
+
+    answer.focus();
+  }
+
+  function resetAll(){
+    // sadece matematik istatistikleri ve puanı sıfırla; envanter kalsın
+    state.stats.total = 0;
+    state.stats.correct = 0;
+    state.stats.wrong = 0;
+    state.stats.streak = 0;
+    state.stats.score = 0;
+    // best streak kalsın (isteyen zorlayabilir)
+    current = null;
+
+    qText.textContent = "Başlamak için “Başla / Yeni Soru”ya tıkla.";
+    qType.textContent = topicLabel(topic.value);
+    qCount.textContent = "0. soru";
+
+    answer.value = "";
+    answer.disabled = true;
+    btnCheck.disabled = true;
+    btnShow.disabled = true;
+
+    setFeedback(null, "Hazır olduğunda başlayalım 🙂");
+    updateStatsUI();
+  }
+
+  // ========= Inventory / Crates =========
+  function rollRarity(weights){
+    const entries = Object.entries(weights);
+    const total = entries.reduce((s, [,w]) => s + w, 0);
+    let r = Math.random() * total;
+    for (const [rar, w] of entries){
+      r -= w;
+      if (r <= 0) return rar;
+    }
+    return entries[entries.length - 1][0];
+  }
+
+  function pickItemByRarity(rarity){
+    const pool = ITEMS.filter(x => x.rarity === rarity);
+    return pool[randInt(0, pool.length - 1)];
+  }
+
+  function addToInventory(item){
+    const inv = state.inventory.items;
+    if (!inv[item.id]){
+      inv[item.id] = { id: item.id, name: item.name, rarity: item.rarity, count: 0 };
+    }
+    inv[item.id].count += 1;
+  }
+
+  function renderDrop(drop){
+    if (!drop){
+      dropName.textContent = "Henüz eşya çıkmadı.";
+      dropRarity.innerHTML = `<span class="dot" style="background: rgba(255,255,255,.25)"></span> Kasa açınca burada görünecek.`;
+      dropWhen.textContent = "—";
+      return;
+    }
+    dropName.textContent = drop.name;
+    dropRarity.innerHTML = `<span class="dot" style="background:${rarityDot(drop.rarity)}"></span> ${RARITY_LABEL[drop.rarity] || drop.rarity}`;
+    dropWhen.textContent = drop.timeText || "—";
+  }
+
+  function renderCrateOdds(){
+    const ct = CRATES[crateType.value];
+    const w = ct.weights;
+    const total = Object.values(w).reduce((s,v)=>s+v,0);
+    const pct = (x) => Math.round((x / total) * 100);
+    crateOddsText.innerHTML =
+      `<b>${ct.name}</b> — Ücret: <b>${ct.cost} puan</b><br>` +
+      `<span class="mini">Şanslar:</span> ` +
+      `<span class="rarChip rar-common">Yaygın ~%${pct(w.common)}</span> ` +
+      `<span class="rarChip rar-rare">Nadir ~%${pct(w.rare)}</span> ` +
+      `<span class="rarChip rar-epic">Efsane ~%${pct(w.epic)}</span> ` +
+      `<span class="rarChip rar-legendary">Efsanevi ~%${pct(w.legendary)}</span>`;
+  }
+
+  function renderInventory(){
+    const filter = invFilter.value;
+    const sort = invSort.value;
+
+    let items = Object.values(state.inventory.items || {}).filter(it => (it.count || 0) > 0);
+
+    if (filter !== "all"){
+      items = items.filter(it => it.rarity === filter);
+    }
+
+    const rarityRank = (r) => {
+      const idx = RARITY_ORDER.indexOf(r);
+      return idx === -1 ? 999 : idx;
+    };
+
+    items.sort((a,b) => {
+      if (sort === "name") return a.name.localeCompare(b.name, "tr");
+      if (sort === "count") return (b.count - a.count) || a.name.localeCompare(b.name, "tr");
+      // rarity
+      return (rarityRank(a.rarity) - rarityRank(b.rarity)) || b.count - a.count || a.name.localeCompare(b.name, "tr");
+    });
+
+    invList.innerHTML = "";
+    if (items.length === 0){
+      const empty = document.createElement("div");
+      empty.className = "smallNote";
+      empty.textContent = "Envanter boş. Kasa açıp eşya çıkar 🙂";
+      invList.appendChild(empty);
+    } else {
+      for (const it of items){
+        const row = document.createElement("div");
+        row.className = "invItem";
+        row.innerHTML = `
+          <div class="left">
+            <span class="tag" style="padding:6px 10px;">
+              <span class="dot" style="background:${rarityDot(it.rarity)}"></span>
+              <span class="name">${escapeHtml(it.name)}</span>
+            </span>
+            <span class="rarChip ${rarityClass(it.rarity)}">${RARITY_LABEL[it.rarity] || it.rarity}</span>
+          </div>
+          <span class="countChip">x${it.count}</span>
+        `;
+        invList.appendChild(row);
+      }
+    }
+
+    const all = Object.values(state.inventory.items || {});
+    const totalCount = all.reduce((s, it) => s + (it.count || 0), 0);
+    const unique = all.filter(it => (it.count || 0) > 0).length;
+
+    invSummary.textContent = `Toplam eşya: ${totalCount} • Çeşit: ${unique} • Kayıt: Bu tarayıcıda (cihazda) saklanır.`;
+    updateStatsUI();
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function openCrate(){
+    const ct = CRATES[crateType.value];
+    const s = state.stats;
+    if (s.score < ct.cost){
+      setFeedback("warn", `Bu kasayı açmak için ${ct.cost} puan lazım. Şu an: ${s.score}`);
+      return;
+    }
+
+    // Pay
+    s.score = Math.max(0, s.score - ct.cost);
+
+    // Roll
+    const rarity = rollRarity(ct.weights);
+    const item = pickItemByRarity(rarity);
+
+    addToInventory(item);
+
+    const drop = { id: item.id, name: item.name, rarity: item.rarity, timeText: nowText() };
+    state.inventory.lastDrop = drop;
+
+    renderDrop(drop);
+    renderInventory();
+
+    const rarTxt = RARITY_LABEL[rarity] || rarity;
+    setFeedback("good", `Kasa açıldı! 🎁 Çıkan eşya: ${item.name} (${rarTxt})`);
+    beep(true);
+  }
+
+  function clearInventory(){
+    state.inventory.items = {};
+    state.inventory.lastDrop = null;
+    renderDrop(null);
+    renderInventory();
+    setFeedback("warn", "Envanter temizlendi.");
+    save();
+  }
+
+  // ========= Settings Persist =========
+  function persistSettings(){
+    state.settings.topic = topic.value;
+    state.settings.minN = clampInt(minN.value, 0);
+    state.settings.maxN = clampInt(maxN.value, 100);
+    state.settings.noNegative = !!noNegative.checked;
+    state.settings.sound = !!sound.checked;
+    save();
+  }
+
+  // ========= Events =========
+  btnStart.addEventListener("click", startNewQuestion);
+
+  btnSkip.addEventListener("click", () => {
+    if (!current){
+      startNewQuestion();
+      return;
+    }
+    setFeedback("warn", "Soru atlandı. Yeni soru geliyor…");
+    current = null;
+    answer.disabled = true;
+    btnCheck.disabled = true;
+    btnShow.disabled = true;
+    setTimeout(() => startNewQuestion(), 350);
+  });
+
+  btnReset.addEventListener("click", resetAll);
+  btnCheck.addEventListener("click", check);
+  btnShow.addEventListener("click", showAnswer);
+
+  answer.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") check();
+  });
+
+  topic.addEventListener("change", () => {
+    qType.textContent = topicLabel(topic.value);
+    modeTag.textContent = topicLabel(topic.value);
+    persistSettings();
+    startNewQuestion();
+  });
+
+  minN.addEventListener("change", () => { validateRange(); persistSettings(); });
+  maxN.addEventListener("change", () => { validateRange(); persistSettings(); });
+  noNegative.addEventListener("change", persistSettings);
+  sound.addEventListener("change", persistSettings);
+
+  crateType.addEventListener("change", () => {
+    renderCrateOdds();
+    updateStatsUI();
+  });
+  btnOpenCrate.addEventListener("click", openCrate);
+  btnInvClear.addEventListener("click", clearInventory);
+
+  invFilter.addEventListener("change", renderInventory);
+  invSort.addEventListener("change", renderInventory);
+
+  // ========= Init =========
+  load();
+  applySettingsToUI();
+  validateRange();
+  renderCrateOdds();
+  renderDrop(state.inventory.lastDrop);
+  renderInventory();
+
+  // ensure stats UI correct and saved
+  updateStatsUI();
+  markSaved();
+})();
+</script>
+</body>
+</html>
